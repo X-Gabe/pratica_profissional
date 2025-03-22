@@ -1,0 +1,265 @@
+/* Estilo geral da página */
+.chat-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  /* Janela do chat */
+  .chat-window {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #805151;
+  }
+  
+  /* Balões de mensagens */
+  .message {
+    max-width: 70%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    position: relative; /* Para posicionar a "seta" */
+  }
+  
+  .message.user {
+    background-color: #007BFF; /* Azul para o usuário */
+    color: white;
+    align-self: flex-end; /* Alinha à direita */
+  }
+  
+  .message.user::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 5px);
+    right: -10px; /* Posição da seta */
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px;
+    border-color: transparent transparent transparent #007BFF; /* Cor da seta */
+  }
+  
+  .message.bot {
+    background-color: #e5e5ea; /* Cinza claro para o chatbot */
+    color: black;
+  }
+  
+  .message.bot::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 5px);
+    left: -10px; /* Posição da seta */
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px;
+    border-color: transparent #e5e5ea transparent transparent; /* Cor da seta */
+  }
+  
+  /* Caixa de entrada */
+  .chat-form {
+    display: flex;
+  }
+  
+  #chatInput {
+    flex-grow: 1; /* Faz o campo de texto ocupar o máximo de espaço */
+    padding: 10px;
+    border-radius: 20px;
+  }
+  
+  #chatInput::placeholder {
+      font-style: italic;
+  }
+  
+  /* Botão interativo */
+  #sendButton {
+     transition:all
+  }
+
+  /* Estilo geral */
+body {
+    font-family: 'Avenir', sans-serif; /* Fonte moderna e limpa */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c); /* Gradiente vibrante */
+    color: #865a61; /* Texto branco para contraste */
+    }
+  
+  .container {
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  /* Botões */
+  button {
+    background-color: #ff4d6d; /* Cor vibrante para os botões */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 8px; /* Bordas arredondadas */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Animação ao passar o mouse */
+  }
+  
+  button:hover {
+    background-color: #ff1e4d; /* Sombra mais escura ao passar o mouse */
+    transform: scale(1.05); /* Leve aumento no tamanho */
+  }
+  
+  /* Links (se necessário) */
+  a {
+    color: #ff4d6d;
+  }
+  
+  a:hover {
+    color: #ff1e4d; /* Sombra mais escura ao passar o mouse */
+  }
+  
+  /* Estilo geral */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .admin-container, .cadastro-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #865a61;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Estilo geral */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Gradiente moderno */
+  color: white;
+}
+
+.container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Botões */
+button {
+  background-color: #ffffff; /* Cor do botão */
+  color: #ff4d6d; /* Cor do texto */
+  border: none;
+  padding: 12px 24px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 8px; /* Bordas arredondadas */
+}
+
+button:hover {
+  background-color: #ff4d6d; /* Cor ao passar o mouse */
+  color: white; /* Texto branco ao passar o mouse */
+}
+
+
+/* Estilo geral */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Gradiente moderno */
+}
+
+.chat-container {
+  width: 80%;
+  max-width: 800px;
+  height: 90%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  text-align: center;
+  background-color: #007BFF; /* Azul moderno */
+  color: white;
+  padding: 10px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+/* Janela do chat */
+.chat-window {
+  flex-grow: 1; /* Faz a janela ocupar o máximo de espaço */
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Balões de mensagens */
+.message {
+  max-width: calc(80% - 20px);
+}
+
