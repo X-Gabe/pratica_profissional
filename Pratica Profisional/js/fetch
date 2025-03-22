@@ -1,0 +1,39 @@
+// Função para login com fetch
+document.getElementById('formLogin')?.addEventListener('submit', function(event) {
+  event.preventDefault(); // Impede o envio padrão do formulário
+
+  const email = document.getElementById('email').value.trim();
+  const senha = document.getElementById('senha').value.trim();
+  const mensagemErro = document.getElementById('mensagemErro');
+
+  // Envia os dados para o servidor
+  fetch('https://seu-servidor.com/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha }) // Dados enviados ao servidor
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Falha no login. Verifique suas credenciais.');
+      }
+      return response.json(); // Converte a resposta em JSON
+    })
+    .then(data => {
+      // Verifica o papel do usuário e redireciona para a página correspondente
+      if (data.role === 'admin') {
+        alert('Bem-vindo, Administrador!');
+        window.location.href = 'admin.html'; // Redireciona para o painel do administrador
+      } else if (data.role === 'user') {
+        alert('Bem-vindo ao sistema!');
+        window.location.href = 'chat.html'; // Redireciona para a página do chatbot
+      } else {
+        mensagemErro.textContent = 'Permissão inválida.';
+        mensagemErro.style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      mensagemErro.textContent = 'Erro ao realizar login. Tente novamente.';
+      mensagemErro.style.display = 'block';
+    });
+});
