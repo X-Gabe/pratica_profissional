@@ -37,3 +37,10 @@ document.getElementById('formLogin')?.addEventListener('submit', function(event)
       mensagemErro.style.display = 'block';
     });
 });
+
+// Carregar a navegação dinamicamente
+fetch('nav.html')
+  .then(response => response.text())
+  .then(data => {
+    document.body.insertAdjacentHTML('afterbegin', data);
+  });

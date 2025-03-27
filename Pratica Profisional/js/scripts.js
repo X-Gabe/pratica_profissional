@@ -58,3 +58,32 @@ document.getElementById('cadastroAdminForm')?.addEventListener('submit', functio
   // Redireciona de volta para a página do administrador
   window.location.href = 'admin.html';
 });
+
+// Simulação de autenticação
+const usuarioLogado = {
+  email: 'admin@example.com',
+  role: 'admin'
+};
+
+// Mostrar ou ocultar links para administradores
+if (usuarioLogado.role === 'admin') {
+  document.querySelectorAll('.admin-only').forEach(element => {
+    element.style.display = 'block';
+  });
+}
+
+// Lógica para botões de navegação móveis
+document.getElementById('back-button').addEventListener('click', () => {
+  window.history.back();
+});
+
+document.getElementById('forward-button').addEventListener('click', () => {
+  window.history.forward();
+});
+
+// Carregar a navegação dinamicamente
+fetch('nav.html')
+  .then(response => response.text())
+  .then(data => {
+    document.body.insertAdjacentHTML('afterbegin', data);
+  });
