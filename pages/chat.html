@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot de Editais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            display: flex;
+            min-height: 100vh;
+            transition: margin-left 0.3s;
+        }
+
+        /* Sidebar/Navbar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            left: -280px;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .sidebar-menu li:hover {
+            background: #f5f5f5;
+        }
+
+        /* Botão de menu (três listras) */
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 12px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 90;
+            display: none;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: #0984e3;
+            margin: 4px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            margin-left: 0;
+            transition: 0.3s;
+        }
+
+        /* Header do Chat */
+        .chat-header {
+            background: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .chat-title {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Estilos unificados para botões */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #0984e3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0873c4;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #0984e3;
+            border: 2px solid #0984e3;
+        }
+
+        .btn-secondary:hover {
+            background: #e8f4ff;
+        }
+
+        /* Área de Mensagens */
+        .chat-messages {
+            padding: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+        }
+
+        /* Balões de Mensagem */
+        .message {
+            margin-bottom: 24px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            margin-left: auto;
+            background: #0984e3;
+            color: white;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        .bot-message {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px 12px 12px 0;
+        }
+
+        .message-content {
+            padding: 16px;
+            word-wrap: break-word;
+            white-space: pre-line;
+        }
+
+        /* Área de Input */
+        .chat-input {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 16px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 8px;
+            z-index: 50;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            background: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Modal PDFs */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .pdf-modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .pdf-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .pdf-item:hover {
+            background: #f5f5f5;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de Menu (três listras) - Visível apenas para admins -->
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu Admin</h3>
+            <button class="close-btn" id="closeSidebar">×</button>
+        </div>
+        <ul class="sidebar-menu" id="adminMenu">
+            <!-- Itens serão preenchidos via JS -->
+        </ul>
+    </nav>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-title">
+                <h3>Chatbot de Editais</h3>
+            </div>
+            <button id="openPdfList" class="btn btn-secondary">
+                📁 PDFs Disponíveis
+            </button>
+        </div>
+
+        <!-- Mensagens -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Mensagens serão injetadas aqui -->
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input">
+            <input type="text" placeholder="Pergunte sobre o edital..." id="userInput">
+            <button class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Modal PDFs -->
+    <div class="pdf-modal" id="pdfModal">
+        <div class="pdf-modal-content">
+            <h4>Selecione um PDF</h4>
+            <div id="pdfList">
+                <!-- PDFs serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificação de Admin (simulação)
+        const isAdmin = true; // Altere para false para testar como usuário normal
+        
+        // Elementos DOM
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const chatContainer = document.getElementById('chatContainer');
+        const openPdfListBtn = document.getElementById('openPdfList');
+        const pdfModal = document.getElementById('pdfModal');
+
+        // Mostrar/ocultar menu toggle baseado no tipo de usuário
+        if (isAdmin) {
+            menuToggle.style.display = 'block';
+        }
+
+        // Controle do Sidebar
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            chatContainer.style.marginLeft = sidebar.classList.contains('active') ? '280px' : '0';
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            menuToggle.classList.remove('active');
+            chatContainer.style.marginLeft = '0';
+        });
+
+        // Menu Admin
+        const adminMenuItems = [
+            { name: 'Home', link: '/' },
+            { name: 'Painel Adm', link: 'painel-adm.html' }
+        ];
+
+        
+        
+
+
+        if(isAdmin) {
+            const menuContainer = document.getElementById('adminMenu');
+            adminMenuItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+                li.onclick = () => {
+                    // Fecha o menu ao selecionar um item
+                    sidebar.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    chatContainer.style.marginLeft = '0';
+                    // Redireciona
+                    window.location.href = item.link;
+                };
+                menuContainer.appendChild(li);
+            });
+        }
+
+        // Controle do Modal de PDFs
+        openPdfListBtn.addEventListener('click', () => {
+            pdfModal.style.display = 'flex';
+            // Simulação de PDFs (substituir por dados reais)
+            const pdfList = document.getElementById('pdfList');
+            pdfList.innerHTML = '';
+            ['Edital 2024-1.pdf', 'Edital Concursos 2023.pdf', 'Manual de Normas.pdf'].forEach(pdf => {
+                const div = document.createElement('div');
+                div.className = 'pdf-item';
+                div.textContent = pdf;
+                div.onclick = () => {
+                    alert(`PDF selecionado: ${pdf}`);
+                    pdfModal.style.display = 'none';
+                };
+                pdfList.appendChild(div);
+            });
+        });
+
+        // Fechar modal ao clicar fora
+        pdfModal.addEventListener('click', (e) => {
+            if(e.target === pdfModal) {
+                pdfModal.style.display = 'none';
+            }
+        });
+
+        // Função de envio de mensagem
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if(message) {
+               //print(f'Assitente: {saudacao}, em que posso ajuda-lo(a)? ');
+                addMessage(message, 'user');
+                setTimeout(() => {
+                   // addMessage('Resposta simulada do chatbot. Este texto demonstrará a quebra de linhas automática dentro dos limites do balão de mensagem.', 'bot');
+                   addMessage(href= RAG/saudacao.py.saudacao);
+                }, 1000);
+                //<a href="pages/login.html">Login</a>
+                //input.value = '';
+            }
+        }
+
+        // Adiciona mensagens ao chat
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+            
+            messageDiv.appendChild(content);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Fechar sidebar ao redimensionar (para mobile)
+        window.addEventListener('resize', () => {
+            if(window.innerWidth > 768 && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                menuToggle.classList.remove('active');
+                chatContainer.style.marginLeft = '0';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+No ifce campus paracuru são ofertados os cursos ,ciências biologicas, redes de computadores, tecnologo em meio ambiente e gestão ambiental.
+
+cada curso tem duração média de;
+
+ciências biologicas - 8 semestres ou 4 anos;
+redes de computadores - 3 semestres ou 1 ano e 6 meses;
+tecnologo em meio ambiente - 4 semestres ou 2 anos;
+gestão ambiental - 4 semestres ou 2 anos.

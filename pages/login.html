@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Chatbot de Editais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            margin: 20px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-header h1 {
+            color: #2d3436;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #636e72;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d3436;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0984e3;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #636e72;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #0873c4;
+        }
+
+        .btn:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #dfe6e9;
+            color: #2d3436;
+        }
+
+        .btn-secondary:hover {
+            background: #b2bec3;
+        }
+
+        .error-message {
+            color: #d63031;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .success-message {
+            color: #00b894;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .login-footer a {
+            color: #0984e3;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 8px;
+        }
+
+        .login-footer .divider {
+            color: #636e72;
+            display: inline-block;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #dfe6e9;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .loading-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0984e3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 24px;
+            }
+            
+            .login-footer a {
+                display: block;
+                margin: 8px 0;
+            }
+            
+            .login-footer .divider {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Acesse sua conta</h1>
+            <p>Use seu e-mail institucional @ifce.edu.br</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="seu.email@ifce.edu.br" required>
+                <div class="error-message" id="emailError">Por favor, insira um e-mail válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                    <span class="toggle-password" id="togglePassword">👁️</span>
+                </div>
+                <div class="error-message" id="passwordError">Senha incorreta</div>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">Entrar</button>
+        </form>
+
+        <div class="login-footer">
+            <a href="#" id="forgotPassword">Esqueci minha senha</a>
+            <span class="divider">•</span>
+            <a href="pages/cadastro.html" id="registerLink">Criar conta</a>
+            <br><br>
+            <a href="../index.html">Voltar para a página inicial</a>
+        </div>
+    </div>
+
+    <!-- Modal de Loading -->
+    <div class="loading-modal" id="loadingModal">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loadingText">Autenticando...</p>
+        </div>
+    </div>
+
+    <!-- Modal de Recuperação de Senha -->
+    <div class="loading-modal" id="recoveryModal">
+        <div class="loading-content">
+            <h3 style="margin-bottom: 16px;">Recuperação de Senha</h3>
+            <p id="recoveryMessage">Um link de recuperação será enviado para seu e-mail institucional</p>
+            <div class="form-group" style="margin-top: 20px;">
+                <input type="email" id="recoveryEmail" placeholder="seu.email@ifce.edu.br" style="width: 100%;">
+                <div class="error-message" id="recoveryError"></div>
+            </div>
+            <button class="btn" id="sendRecoveryBtn" style="margin-top: 16px;">Enviar Link</button>
+            <button class="btn btn-secondary" id="cancelRecoveryBtn" style="margin-top: 8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const registerLink = document.getElementById('registerLink');
+        const loadingModal = document.getElementById('loadingModal');
+        const recoveryModal = document.getElementById('recoveryModal');
+
+        // Mostrar/ocultar senha
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🔒';
+        });
+
+        // Validação de formulário
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Resetar mensagens de erro
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            // Validar e-mail
+            if (!email.includes('@')) {
+                emailError.style.display = 'block';
+                return;
+            }
+            
+            // Mostrar loading
+            loadingModal.style.display = 'flex';
+            document.getElementById('loadingText').textContent = 'Autenticando...';
+            
+            // Simulação de autenticação (2 segundos)
+            setTimeout(() => {
+                loadingModal.style.display = 'none';
+                
+                // Credenciais de administrador
+                if (email === 'admin@ifce.edu.br' && password === 'Admin@1234') {
+                    localStorage.setItem('isAdmin', 'true');
+                    localStorage.setItem('userEmail', email);
+                    window.location.href = '/pages/painel-adm.html';
+                    return;
+                } 
+                // Credenciais de usuário comum
+                else if (email === 'usuario@ifce.edu.br' && password === 'Usuario@1234') {
+                    localStorage.setItem('isAdmin', 'false');
+                    localStorage.setItem('userEmail', email);
+                    window.location.href = 'pages/chat.html';
+                    return;
+                }
+                // Acesso como visitante (qualquer email terminando com @ifce.edu.br)
+                else if (email.endsWith('@ifce.edu.br')) {
+                    localStorage.setItem('isAdmin', 'false');
+                    localStorage.setItem('userEmail', email);
+                    window.location.href = 'pages/chat.html';
+                    return;
+                }
+                else {
+                    passwordError.style.display = 'block';
+                    passwordInput.focus();
+                }
+            }, 2000);
+        });
+
+
+        // Recuperação de senha
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('recoveryEmail').value = '';
+            document.getElementById('recoveryError').style.display = 'none';
+            document.getElementById('recoveryMessage').textContent = 'Um link de recuperação será enviado para seu e-mail institucional';
+            recoveryModal.style.display = 'flex';
+        });
+
+        // Enviar link de recuperação
+        document.getElementById('sendRecoveryBtn').addEventListener('click', function() {
+            const recoveryEmail = document.getElementById('recoveryEmail').value;
+            const recoveryError = document.getElementById('recoveryError');
+            
+            if (!recoveryEmail.includes('@')) {
+                recoveryError.textContent = 'Por favor, insira um e-mail válido';
+                recoveryError.style.display = 'block';
+                return;
+            }
+            
+            recoveryError.style.display = 'none';
+            document.getElementById('recoveryMessage').textContent = `Link enviado para ${recoveryEmail}`;
+            this.disabled = true;
+            
+            // Simulação de envio
+            setTimeout(() => {
+                recoveryModal.style.display = 'none';
+                document.getElementById('recoveryEmail').value = '';
+                this.disabled = false;
+                alert(`Um link de recuperação foi enviado para ${recoveryEmail}`);
+            }, 1500);
+        });
+
+        // Cancelar recuperação
+        document.getElementById('cancelRecoveryBtn').addEventListener('click', function() {
+            recoveryModal.style.display = 'none';
+            document.getElementById('recoveryEmail').value = '';
+            document.getElementById('recoveryError').style.display = 'none';
+        });
+
+        // Redirecionar para cadastro
+        registerLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'cadastro.html';
+        });
+    </script>
+</body>
+</html>

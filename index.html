@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot de Editais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: #2d3436;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0984e3;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+        
+        .hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center; 
+            padding: 40px;
+            background: linear-gradient(135deg, #0984e3, #6c5ce7);
+            color: white;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #0984e3;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            nav {
+                margin-top: 15px;
+            }
+            
+            nav a {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Chatbot de Editais</div>
+        <nav>
+            <a href="pages/login.html">Login</a>
+            <a href="pages/cadastro.html">Cadastre-se</a>
+            <a href="pages/chat.html">Acessar Chat</a>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Encontre respostas em editais rapidamente</h1>
+            <p>Nosso chatbot utiliza inteligência artificial para ajudar você a encontrar informações em editais e documentos oficiais de forma rápida e precisa.</p>
+            <a href="pages/login.html" class="btn">Comece Agora</a>
+            <a href="pages/chat.html" class="btn btn-outline">Experimente como Visitante</a>
+        </div>
+    </section>
+    
+    <footer>
+        &copy; 2024 Chatbot de Editais - IFCE. Todos os direitos reservados.
+    </footer>
+</body>
+</html>
